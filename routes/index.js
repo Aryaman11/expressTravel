@@ -33,4 +33,6 @@ router.get('/listing', async (req, res) => {
     res.send(data);  // Send the result of the async function
 });
 
+app.use('/.netlify/functions/server', router);
+
 module.exports = router;
