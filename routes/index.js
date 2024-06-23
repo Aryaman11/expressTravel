@@ -7,7 +7,7 @@ var listing = require('../public/api/listing');
 const app = express();
 const cors = require('cors'); 
 app.use(cors({
-    origin: ["*"]
+    origin: "*"
 }));
 
 /* GET home page. */
