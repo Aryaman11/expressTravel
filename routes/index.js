@@ -6,7 +6,9 @@ var checkout = require('../public/api/checkout');
 var listing = require('../public/api/listing');
 const app = express();
 const cors = require('cors'); 
-app.use(cors());
+app.use(cors({
+    origin: ["*"]
+}));
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
