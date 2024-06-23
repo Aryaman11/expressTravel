@@ -6,38 +6,32 @@ var checkout = require('../public/api/checkout');
 var listing = require('../public/api/listing');
 const app = express();
 const cors = require('cors'); 
-app.use(cors({
-  "origin": "*",
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-  "preflightContinue": false,
-  "optionsSuccessStatus": 204
-}));
+app.use(cors());
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', cors(),function(req, res, next) {
     res.render('index', { title: 'Express' });
 });
 
-router.get('/home', async (req, res) => {
+router.get('/home',cors() ,async (req, res) => {
     const data = await home(req, res);  // Await the result of the async function
     res.send(data);  // Send the result of the async function
 });
 
-router.get('/detail', async (req, res) => {
+router.get('/detail',cors() ,async (req, res) => {
     const data = await detail(req, res);  // Await the result of the async function
     res.send(data);  // Send the result of the async function
 });
 
-router.get('/checkout', async (req, res) => {
+router.get('/checkout', cors(),async (req, res) => {
     const data = await checkout(req, res);  // Await the result of the async function
     res.send(data);  // Send the result of the async function
 });
 
-router.get('/listing', async (req, res) => {
+router.get('/listing' , cors() ,async (req, res) => {
     const data = await listing(req, res);  // Await the result of the async function
     res.send(data);  // Send the result of the async function
 });
 
-app.use('/.netlify/functions/api', router);
 
 module.exports = router;
