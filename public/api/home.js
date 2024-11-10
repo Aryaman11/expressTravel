@@ -108,7 +108,14 @@ module.exports = async function(req,res) {
           let response = {
        "hotels_by_places" :  [{"name" : "Australia", "count" : dataAustralia.length},{"name" : "Portugal", "count" : dataPortugal.length},{"name" : "United States", "count" : dataUS.length},{"name" : "Turkey", "count" : dataTurkey.length}],
        "hotels_by_type":[{"name":"House" , "count" : houseCount.length },{"name":"Apartment" , "count" : ApartmentCount.length },{"name":"Hotel" , "count" : HotelCount.length },{"name":"Hostel" , "count" : HostelCount.length }]
+
+       
           }
+          return{
+        status: "200",
+        message: "success",
+        response: response,
+      };
         }).catch((err) => {
           if(response.length === 0)
             console.log("err--->")
@@ -121,11 +128,7 @@ module.exports = async function(req,res) {
         });
       
       
-      return{
-        status: "200",
-        message: "success",
-        response: response,
-      };
+      
     }
     catch(err){
       console.log(">>>>>",err);
