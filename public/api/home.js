@@ -104,8 +104,20 @@ module.exports = async function(req,res) {
         ]).toArray();
 
 
-        let promise  =await Promise.all([dataAustralia,dataPortugal,dataUS,dataTurkey,houseCount,ApartmentCount,HotelCount,HostelCount]).then((data) => {
-          let response = {
+        let promise  = await Promise.all([dataAustralia,dataPortugal,dataUS,dataTurkey,houseCount,ApartmentCount,HotelCount,HostelCount]).then((data) => {
+          
+        }).catch((err) => {
+          if(response.length === 0)
+            console.log("err--->",err)
+            return {
+              status: "500",
+              message: "data not found",
+              response: {},
+            };
+
+        });
+
+        let response = {
        "hotels_by_places" :  [{"name" : "Australia", "count" : dataAustralia.length},{"name" : "Portugal", "count" : dataPortugal.length},{"name" : "United States", "count" : dataUS.length},{"name" : "Turkey", "count" : dataTurkey.length}],
        "hotels_by_type":[{"name":"House" , "count" : houseCount.length },{"name":"Apartment" , "count" : ApartmentCount.length },{"name":"Hotel" , "count" : HotelCount.length },{"name":"Hostel" , "count" : HostelCount.length }]
 
@@ -116,16 +128,6 @@ module.exports = async function(req,res) {
         message: "success",
         response: response,
       };
-        }).catch((err) => {
-          if(response.length === 0)
-            console.log("err--->")
-            return {
-              status: "500",
-              message: "data not found",
-              response: {},
-            };
-
-        });
       
       
       
