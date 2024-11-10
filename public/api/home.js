@@ -14,7 +14,7 @@ module.exports = async function(req,res) {
 
   try{
       
-      let dataAustralia = await client.db("sample_airbnb").collection("listingsAndReviews")
+      let dataAustralia = client.db("sample_airbnb").collection("listingsAndReviews")
       .aggregate([
         {
          "$match": {"address.country": "Australia"}
@@ -28,7 +28,7 @@ module.exports = async function(req,res) {
 
         // console.log(">>>>>> length",dataAustralia.count)
 
-      let dataPortugal = await client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
+      let dataPortugal = client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
         {
          $match : {"address.country": "Portugal"}
         },
@@ -40,7 +40,7 @@ module.exports = async function(req,res) {
         
         ]).toArray();
 
-      let dataUS = await client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
+      let dataUS = client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
         {
          $match : {"address.country": "United States"}
         },
@@ -50,7 +50,7 @@ module.exports = async function(req,res) {
         }
         }
         ]).toArray();
-        let dataTurkey = await client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
+        let dataTurkey = client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
         {
          $match : {"address.country": "Turkey"}
         },
@@ -61,7 +61,7 @@ module.exports = async function(req,res) {
         }
         ]).toArray();
 
-        let houseCount = await client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
+        let houseCount = client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
         {
          $match : {property_type: "House"}
         },
@@ -72,7 +72,7 @@ module.exports = async function(req,res) {
         }
         ]).toArray();
 
-        let ApartmentCount = await client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
+        let ApartmentCount = client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
         {
          $match : {property_type: "Apartment"}
         },
@@ -82,7 +82,7 @@ module.exports = async function(req,res) {
           }
         }
         ]).toArray();
-        let HotelCount = await client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
+        let HotelCount = client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
         {
          $match : {property_type: "Hotel"}
         },
@@ -92,7 +92,7 @@ module.exports = async function(req,res) {
         }
       }
         ]).toArray();
-        let HostelCount = await client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
+        let HostelCount = client.db("sample_airbnb").collection("listingsAndReviews").aggregate([
         {
          $match : {property_type: "Hostel"}
         },
@@ -104,19 +104,23 @@ module.exports = async function(req,res) {
         ]).toArray();
 
 
-
-
-
-      let response = {
+        let promise  =await Promise.all([dataAustralia,dataPortugal,dataUS,dataTurkey,houseCount,ApartmentCount,HotelCount,HostelCount]).then((data) => {
+          let response = {
        "hotels_by_places" :  [{"name" : "Australia", "count" : dataAustralia.length},{"name" : "Portugal", "count" : dataPortugal.length},{"name" : "United States", "count" : dataUS.length},{"name" : "Turkey", "count" : dataTurkey.length}],
        "hotels_by_type":[{"name":"House" , "count" : houseCount.length },{"name":"Apartment" , "count" : ApartmentCount.length },{"name":"Hotel" , "count" : HotelCount.length },{"name":"Hostel" , "count" : HostelCount.length }]
-      }
-      if(response.length === 0)
-      return {
-        status: "500",
-        message: "data not found",
-        response: {},
-      };
+          }
+        }).catch((err) => {
+          if(response.length === 0)
+            console.log("err--->")
+            return {
+              status: "500",
+              message: "data not found",
+              response: {},
+            };
+
+        });
+      
+      
       return{
         status: "200",
         message: "success",
